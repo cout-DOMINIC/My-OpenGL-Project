@@ -1,0 +1,7 @@
+# Directories
+.vs/
+bin/
+External Libs/
+
+# Files
+*.user
