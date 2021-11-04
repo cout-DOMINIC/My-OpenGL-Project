@@ -1,7 +1,7 @@
 # Directories
 .vs/
 bin/
-External Libs/
+Dependencies/
 
 # Files
 *.user
