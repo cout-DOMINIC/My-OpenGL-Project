@@ -1,4 +1,2 @@
-﻿  Test.cpp
-C:\dev\MyOpenGL\MyOpenGL\src\Test.cpp(75): warning C4715: 'ENGINE::TestWindow': not all control paths return a value
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+﻿  Main.cpp
   MyOpenGL.vcxproj -> C:\dev\MyOpenGL\Debug\MyOpenGL.exe

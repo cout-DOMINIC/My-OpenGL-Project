@@ -3,73 +3,53 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-int main()
-{
-	const GLint WIDTH = 800, HEIGHT = 600;
-	ENGINE::TestWindow(WIDTH, HEIGHT);
-}
+//int main()
+//{
+//	
+//	const GLint WIDTH = 800, HEIGHT = 600;
+//	ENGINE::TestWindow(WIDTH, HEIGHT);
+//}
 
 int ENGINE::TestWindow(GLint WIDTH, GLint HEIGHT)
 {
-	
-	// initialise GLFW
+	// Source: https://www.glfw.org/documentation.html 
+
+	GLFWwindow* window;
+
+	/* Initialize the library */
 	if (!glfwInit())
+		return -1;
+
+	/* Create a windowed mode window and its OpenGL context */
+	window = glfwCreateWindow(WIDTH, HEIGHT, "My First Test Window!", NULL, NULL);
+	if (!window)
 	{
-		printf("GLFW Initialisation failed!");
 		glfwTerminate();
-		return 1;
+		return -1;
 	}
 
-	// Setup GLFW window properties
-	// OpenGL version
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	/* Make the window's context current */
+	glfwMakeContextCurrent(window);
 
-	// Core profile = No Backwards Compatibility
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	// Allow forward compatibility
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-	GLFWwindow* mainWindow = glfwCreateWindow(WIDTH, HEIGHT, "Test Window!", NULL, NULL);
-	if (!mainWindow)
+	/* Loop until the user closes the window */
+	while (!glfwWindowShouldClose(window))
 	{
-		printf("GLFW Window creation failed!");
-		glfwTerminate();
-		return 1;
-	}
-
-	// Get Buffer size information
-	int bufferWidth, bufferHeight;
-	glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
-
-	// Set context for GLEW to use
-	glfwMakeContextCurrent(mainWindow);
-
-	// Allow modern extension features
-	glewExperimental = GL_TRUE;
-
-	if (glewInit() != GLEW_OK)
-	{
-		printf("GLEW initialisation failed!");
-		glfwDestroyWindow(mainWindow);
-		glfwTerminate();
-		return 1;
-	}
-
-	// Setup viewport size
-	glViewport(0, 0, bufferWidth, bufferHeight);
-
-	// Loop until window closed
-	while (!glfwWindowShouldClose(mainWindow))
-	{
-		// Get + Handle user input events
-		glfwPollEvents();
-
-		// Clear window
+		/* Render here */
 		glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glfwSwapBuffers(mainWindow);
+
+
+
+		/* Swap front and back buffers */
+		glfwSwapBuffers(window);
+
+		/* Poll for and process events */
+		glfwPollEvents();
 	}
+
+	glfwTerminate();
+	return 0;
+
 }
