@@ -1,13 +1,20 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <cmath>
+#include <glm/mat4x4.hpp>
 
 // Window dimensions
 const GLint WIDTH = 1024, HEIGHT = 768;
 
 // OpenGL unsigned int
-GLuint VBO, VAO, shader;
+GLuint VBO, VAO, shader, uniformXMove;
 GLsizei n{1};
+
+bool direction = true;
+float triOffset = 0.0f;
+float triMaxoffset = 0.7f;
+float triIncrement = 0.01f;
 
 // Creating Vertex Shader itself
 static const char* VertexShader = "								\n\
@@ -18,7 +25,7 @@ uniform float u_xMove;											\n\
 																\n\
 void main()														\n\
 {																\n\
-	gl_Position = vec4(u_xMove * pos.x, 0.5 * pos.y, pos.z, 1.0);\n\
+	gl_Position = vec4(0.4 * pos.x + u_xMove, 0.5 * pos.y, pos.z, 1.0); \n\
 }";
 
 // Creating Fragment Shader itself
@@ -167,6 +174,8 @@ void CompileShaders()
 		printf("Error validating program: '%s'\n", eLog);
 		return;
 	}
+
+	uniformXMove = glGetUniformLocation(shader, "u_xMove");
 }
 
 int main()
@@ -225,12 +234,12 @@ int main()
 	CompileShaders();
 
 
-	glUseProgram(shader);
+	//glUseProgram(shader);
 	int location = glGetUniformLocation(shader, "u_Color");
 	glUniform4f(location, 1.0f, 0.0f, 0.0f, 1.0f);
 
-	int location2 = glGetUniformLocation(shader, "u_xMove");
-	glUniform1f(location2, 1.2f);
+	//uniformXMove = glGetUniformLocation(shader, "u_xMove");
+	// glUniform1f(uniformXMove, 1.0f);
 	
 	//float xMove = 0.0f;
 	//float incrementMove = 0.0f;
@@ -244,17 +253,32 @@ int main()
 		// Get + Handle user input events
 		glfwPollEvents();
 
+
+		
+		if (direction)
+		{
+			triOffset += triIncrement;
+		}
+		else {
+			triOffset -= triIncrement;
+		}
+
+		if (abs(triOffset) >= triMaxoffset)
+		{
+			direction = false;
+		}
+
+		glUniform1f(uniformXMove, triOffset);
+
+
 		// Clear window
 		glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 
-		//glUniform1f(location2, xMove);
-		//if (xMove > 2.0f)
-		//	incrementMove = -1.05f;
-		//else if (xMove < 0.0f)
-		//	incrementMove = 1.05f;
-		//xMove += incrementMove;
+		
+
+
 
 
 		glUniform4f(location, red, 0.1f, 0.0f, 1.0f);
@@ -270,7 +294,10 @@ int main()
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glBindVertexArray(0);
 
-		//glUseProgram(0);
+		glUseProgram(shader);
+		glUniform1f(uniformXMove, triOffset);
+
+
 
 		glfwSwapBuffers(mainWindow);
 	}
