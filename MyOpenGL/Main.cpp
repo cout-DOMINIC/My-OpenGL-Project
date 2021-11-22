@@ -14,7 +14,7 @@ const GLint WIDTH = 800, HEIGHT = 600;
 const GLfloat toRadians{ 3.14159265f / 180.0f };
 
 // OpenGL unsigned int
-GLuint VBO, VAO, shader, uniformModel;
+GLuint VBO, VAO, shader, uniformModel, uniformProjection;
 // Index Buffer Object
 GLuint IBO;
 
@@ -44,11 +44,14 @@ out vec4 vertexColor;\n\
 \n\
 																\n\
 uniform mat4 model;											    \n\
+\n\
+uniform mat4 projection;											    \n\
+\n\
 																\n\
 void main()														\n\
 {   // die ersten 3 Werte in Vec4 sind die drei Werte aus Vec3  \n\
 	// Das funktioniert, WENN wir glm::scale aufrufen und die Größe festlegen	\n\
-	gl_Position = model * vec4(pos, 1.0);										\n\
+	gl_Position = projection * model * vec4(pos, 1.0);										\n\
 	vertexColor = vec4(clamp(pos, 0.0f, 1.0f), 1.0f);							\n\ \n\
 }";
 
@@ -72,13 +75,13 @@ void CreateTriangle()
 {
 
 	GLuint indices[4 * 3] = {
-		0, 3, 1,
+		0, 1, 2,
 		
 		1, 3, 2,
 		
-		2, 3, 0,
+		0, 1, 3,
 		
-		0, 1, 2
+		0, 3, 2
 	};
 
 
@@ -229,6 +232,14 @@ void CompileShaders()
 	}
 
 	uniformModel = glGetUniformLocation(shader, "model");
+
+
+
+
+	uniformProjection = glGetUniformLocation(shader, "projection");
+
+
+
 }
 
 int main()
@@ -300,6 +311,13 @@ int main()
 
 	CreateTriangle();
 	CompileShaders();
+
+
+	// Projectionmatrix itself
+	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)bufferWidth/(GLfloat)bufferHeight, 0.1f, 100.0f);
+
+
+
 
 
 	//glUseProgram(shader);
@@ -413,13 +431,17 @@ int main()
 	
 		glm::mat4 model{1.0f};
 
-		// 
-		model = glm::rotate(model, curAngle * toRadians, glm::vec3(1.0f, 1.0f, 0.0f));
-		// model = glm::translate(model, glm::vec3(0.4f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(triOffset, 0.0f, -2.5f));
+		// model = glm::rotate(model, curAngle * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		
 		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 		
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+
+
+		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 
 
 		glfwSwapBuffers(mainWindow);
