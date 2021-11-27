@@ -22,24 +22,46 @@ void Shader::CreateFromFiles(const char* vertexLocation, const char* fragmentLoc
 	CompileShader(vertexCode, fragmentCode);
 }
 
+//std::string Shader::ReadFile(const char* fileLocation)
+//{
+//	std::string content;
+//	std::ifstream fileStream(fileLocation, std::ios::in);
+//
+//	if (!fileStream.is_open())
+//	{
+//		printf("Failed to read %s! File does not exist.", fileLocation);
+//		return "";
+//	}
+//
+//	std::string line = "";
+//	while (!fileStream.eof())
+//	{
+//		std::getline(fileStream, line);
+//		content.append(line + "\n");
+//	}
+//	fileStream.close();
+//	return content;
+//}
+
 std::string Shader::ReadFile(const char* fileLocation)
 {
 	std::string content;
-	std::ifstream fileStream(fileLocation, std::ios::in);
+	std::ifstream fileStream(fileLocation);
 
-	if (!fileStream.is_open())
+	if (fileStream.is_open())
 	{
+		while (!fileStream.eof())
+		{
+			std::string line = "";
+			std::getline(fileStream, line);
+			content.append(line + "\n");
+		}
+		fileStream.close();
+	}
+	else {
 		printf("Failed to read %s! File does not exist.", fileLocation);
 		return "";
 	}
-
-	std::string line = "";
-	while (!fileStream.eof())
-	{
-		std::getline(fileStream, line);
-		content.append(line + "\n");
-	}
-	fileStream.close();
 	return content;
 }
 
