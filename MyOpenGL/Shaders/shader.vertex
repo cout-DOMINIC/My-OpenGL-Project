@@ -1,16 +1,18 @@
-#version 330													
+#version 440													
 layout (location = 0) in vec3 pos;								
 
 out vec4 vertexColor;
 																
 uniform mat4 model;											    
 
-uniform mat4 projection;											    
+uniform mat4 projection;	
+
+uniform mat4 view;										    
 
 																
 void main()														
 {   // die ersten 3 Werte in Vec4 sind die drei Werte aus Vec3  
 	// Das funktioniert, WENN wir glm::scale aufrufen und die Größe festlegen	
-	gl_Position = projection * model * vec4(pos, 1.0);										
+	gl_Position = projection * view * model * vec4(pos, 1.0);										
 	vertexColor = vec4(clamp(pos, 0.0f, 1.0f), 1.0f);							
 }

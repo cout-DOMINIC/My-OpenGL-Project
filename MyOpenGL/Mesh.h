@@ -15,7 +15,7 @@ public:
 	~Mesh();
 
 private:
-	GLuint VAO, VBO, IBO;
-	GLsizei indexCount;
+	GLuint VAO{ 0 }, VBO{ 0 }, IBO{ 0 };
+	GLsizei indexCount{ 0 };
 };
 
