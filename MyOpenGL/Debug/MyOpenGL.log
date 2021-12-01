@@ -1,6 +1,14 @@
-﻿  Main.cpp
-C:\dev\MyOpenGL\MyOpenGL\Window.h(16,36): warning C4244: 'return': conversion from 'GLint' to 'GLfloat', possible loss of data
-C:\dev\MyOpenGL\MyOpenGL\Window.h(17,37): warning C4244: 'return': conversion from 'GLint' to 'GLfloat', possible loss of data
-C:\dev\MyOpenGL\MyOpenGL\Main.cpp(213,15): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-C:\dev\MyOpenGL\MyOpenGL\Main.cpp(230,20): warning C4018: '<': signed/unsigned mismatch
+﻿  Camera.cpp
+  Main.cpp
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(170,24): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(182,20): warning C4018: '<': signed/unsigned mismatch
+  Window.cpp
+C:\dev\MyOpenGL\MyOpenGL\Window.cpp(90,14): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\dev\MyOpenGL\MyOpenGL\Window.cpp(91,14): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\dev\MyOpenGL\MyOpenGL\Window.cpp(95,20): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\dev\MyOpenGL\MyOpenGL\Window.cpp(97,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\dev\MyOpenGL\MyOpenGL\Window.cpp(99,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\dev\MyOpenGL\MyOpenGL\Window.cpp(100,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+  Generating Code...
+C:\dev\MyOpenGL\MyOpenGL\Window.cpp(65): warning C4715: 'Window::InitialiseWindow': not all control paths return a value
   MyOpenGL.vcxproj -> C:\dev\MyOpenGL\Debug\MyOpenGL.exe

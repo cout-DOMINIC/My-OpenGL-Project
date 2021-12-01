@@ -1,9 +1,9 @@
 #include <iostream>
+#include <cmath>
+#include <vector>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <cmath>
-
-#include <vector>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -17,10 +17,6 @@
 
 // covers range of ascii codes
 bool keys[1024];
-
-
-
-
 // Window dimensions
 const GLint WIDTH = 1024, HEIGHT = 768;
 // Bogenmaß (für Winkel)
@@ -33,7 +29,7 @@ std::vector<Shader*> shaderList;
 
 Camera* camera;
 GLfloat deltaTime{ 0.0f };
-GLfloat lastTime{ 0.0f };
+GLfloat lastFrame{ 0.0f };
 
 // Creating Vertex Shader itself
 /*static*/ const char* VertexShader = "Shaders/shader.vertex";
@@ -55,12 +51,9 @@ void CreateObjects()
 		-1.0f, -1.0f, 0.0f,
 		// this one is going into the background!
 		 0.0f, -1.0f, 1.0f,
-
 		 1.0f, -1.0f, 0.0f,
 		 0.0f,  1.0f, 0.0f
 	};
-
-
 
 	GLuint indicesSquare[12 * 3] = {
 		// Front
@@ -83,8 +76,6 @@ void CreateObjects()
 		0, 1, 4,
 	};
 
-
-	// Square
 	GLfloat verticesSquare[8 * 3] =
 	{
 		// links unten
@@ -105,7 +96,6 @@ void CreateObjects()
 		// rechts oben hinten
 		 1.0f, 1.0f, 1.0f,
 	};
-
 
 	GLuint indicesPyramid[6 * 3] = {
 		// Front
@@ -152,51 +142,19 @@ void CreateObjects()
 void CreateShaders()
 {
 	Shader* shader1 = new Shader();
-	shader1->CreateFromFiles(VertexShader, FragmentShader);
+	shader1->CreateShaderCode(VertexShader, FragmentShader);
 	shaderList.push_back(shader1);
-}
-
-void handleKeys(GLFWwindow* window, int key, int code, int action, int mode)
-{
-	mainWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
 }
 
 int main()
 {
-
-	mainWindow = new Window(1024, 768);
-	mainWindow->Initialise();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//glfwSetWindowUserPointer(mainWindow, nullptr);
-
-
-
-
-
+	mainWindow = new Window(1060, 600);
+	mainWindow->InitialiseWindow();
+	// Camera speed, Mouse sensitivity
+	camera = new Camera(10.0f, 6.0f);
 
 	CreateObjects();
 	CreateShaders();
-
-	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 2.0f);
 
 	GLfloat curAngle{ 0.0f };
 	GLuint uniformProjection{0};
@@ -204,35 +162,29 @@ int main()
 	GLuint uniformView{ 0 };
 
 	// Projectionmatrix itself
-	glm::mat4 projection = glm::perspective(45.0f, mainWindow->getBufferWidth() / mainWindow->getBufferHeight(), 0.1f, 100.0f);
+	glm::mat4 projection = glm::perspective(45.0f, static_cast<GLfloat>(mainWindow->GetBufferWidth()) / static_cast<GLfloat>(mainWindow->GetBufferHeight()), 0.1f, 100.0f);
 
 	// Loop until window closed
-	while (!mainWindow->getShouldClose())
+	while (!glfwWindowShouldClose(mainWindow->mainWindow))
 	{
+		GLfloat currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 
-		GLfloat now = glfwGetTime();
-		deltaTime = now - lastTime;
-		lastTime = now;
-
-
-		// Get + Handle user input events
-		glfwPollEvents();
-
-		camera->keyControl(mainWindow->getKeys(), deltaTime);
-		camera->mouseControl(mainWindow->getXChange(), mainWindow->getYChange(), deltaTime);
+		camera->ProcessKeyboardInput(mainWindow->GetKeys(), deltaTime);
+		camera->UpdateMouse(mainWindow->PreventXoffsetMoving(), mainWindow->PreventYoffsetMoving(), deltaTime);
 
 		// Clear window
 		glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
 		for (int i{0}; i < shaderList.size(); ++i)
 		{
-			shaderList[i]->UseShader();
-			uniformModel = shaderList[i]->GetModelLocation();
-			uniformProjection = shaderList[i]->GetProjectionLocation();
-			uniformView = shaderList[i]->GetViewLocation();
+			shaderList[i]->UseShaderProgram();
+			uniformModel = shaderList[i]->GetUniformModel();
+			uniformProjection = shaderList[i]->GetUniformProjection();
+			uniformView = shaderList[i]->GetUniformView();
 		}
 
 		// initialised 4 x 4 matrix
@@ -241,7 +193,7 @@ int main()
 		glm::mat4 pyramid{1.0f};
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera->calculateViewMatrix()));
+		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera->ViewMatrix()));
 		curAngle += 0.3f;
 
 		// Triangle
@@ -266,9 +218,13 @@ int main()
 		meshList[2]->RenderMesh();
 
 		glUseProgram(0);
-		//Swap frontand back buffers
-		mainWindow->swapBuffers();
+
+		// Swap front and back buffers
+		glfwSwapBuffers(mainWindow->mainWindow);
+		// poll events (keys pressed and / or released | mouse moved or not)
+		glfwPollEvents();
 	}
+
 	glfwTerminate();
 	return 0;
 }

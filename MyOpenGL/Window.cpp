@@ -1,35 +1,15 @@
 #include "Window.h"
 
 
-Window::Window()
+Window::Window() { }
+
+Window::Window(GLint width, GLint height)
 {
-	width = 1024;
-	height = 786;
-
-	xChange = 0.0f;
-	yChange = 0.0f;
-
-	for (size_t i{ 0 }; i < 1024; ++i)
-	{
-		keys[i] = 0;
-	}
+	this->width = width;
+	this->height = height;
 }
 
-Window::Window(GLint windowWidth, GLint windowHeight)
-{
-	width = windowWidth;
-	height = windowHeight;
-
-	xChange = 0.0f;
-	yChange = 0.0f;
-
-	for (size_t i{ 0 }; i < 1024; ++i)
-	{
-		keys[i] = 0;
-	}
-}
-
-int Window::Initialise()
+int Window::InitialiseWindow()
 {
 	// Initialise GLFW
 	if (!glfwInit()) { return -1; }
@@ -53,8 +33,12 @@ int Window::Initialise()
 	// Set context for GLEW to use
 	glfwMakeContextCurrent(mainWindow);
 
-	// Handle Key + Mouse Input
-	createCallbacks();
+	//**********
+	// Callbacks: Handle Key + Mouse Input
+	glfwSetKeyCallback(mainWindow, GLFWkeyfun);
+	glfwSetCursorPosCallback(mainWindow, MouseCallback);
+	//**********
+
 	glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// vertical synchronization (vsync!)
@@ -77,77 +61,41 @@ int Window::Initialise()
 	// Setup Viewport size
 	glViewport(0, 0, bufferWidth, bufferHeight);
 
-
 	glfwSetWindowUserPointer(mainWindow, this);
 }
 
-void Window::createCallbacks()
+// https://www.glfw.org/docs/3.0/group__input.html
+void Window::GLFWkeyfun(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	glfwSetKeyCallback(mainWindow, handleKeys);
-	glfwSetCursorPosCallback(mainWindow, handleMouse);
-}
+	Window* w = static_cast<Window*>(glfwGetWindowUserPointer(window));
 
-GLfloat Window::getXChange()
-{
-	GLfloat theChange = xChange;
-	xChange = 0.0f;
-	return theChange;
-}
+	if (key == GLFW_KEY_ESCAPE && GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
 
-GLfloat Window::getYChange()
-{
-	GLfloat theChange = yChange;
-	yChange = 0.0f;
-	return theChange;
-}
-
-void Window::handleKeys(GLFWwindow* window, int key, int code, int action, int mode)
-{
-	Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
-
-	if (key == GLFW_KEY_ESCAPE && action && GLFW_PRESS)
-	{
-		glfwSetWindowShouldClose(window, GL_TRUE);
-	}
-
-	if (key >= 0 && key < 1024)
+	if (key >= 0 && key < 256)
 	{
 		if (action == GLFW_PRESS)
-		{
-			theWindow->keys[key] = true;
-			// printf("Presed: %d\n", key);
-		}
-		else if(action == GLFW_RELEASE)
-		{
-			theWindow->keys[key] = false;
-			// printf("Released: %d\n", key);
-		}
+			w->keys[key] = true;
+		else if (action == GLFW_RELEASE)
+			w->keys[key] = false;
 	}
 }
 
-void Window::handleMouse(GLFWwindow* window, double xPos, double yPos)
+void Window::MouseCallback(GLFWwindow* window, double xPos, double yPos)
 {
-	Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+	Window* w = static_cast<Window*>(glfwGetWindowUserPointer(window));
 
-	if (theWindow->mouseFirstMoved)
+	if (w->firstMouse)
 	{
-		theWindow->lastX = xPos;
-		theWindow->lastY = yPos;
-		theWindow->mouseFirstMoved = false;
+		w->lastX = xPos;
+		w->lastY = yPos;
+		w->firstMouse = false;
 	}
 
-	theWindow->xChange = xPos - theWindow->lastX;
+	w->xOffset = xPos - w->lastX;
 	// prevent invert
-	theWindow->yChange = theWindow->lastY - yPos;
+	w->yOffset = w->lastY - yPos;
 
-	theWindow->lastX = xPos;
-	theWindow->lastY = yPos;
-
-	printf("x:%.6f, y:%.6f\n", theWindow->xChange, theWindow->yChange);
-}
-
-Window::~Window()
-{
-	glfwDestroyWindow(mainWindow);
-	glfwTerminate();
+	w->lastX = xPos;
+	w->lastY = yPos;
 }

@@ -7,11 +7,8 @@ class Mesh
 {
 public:
 	Mesh();
-
 	void CreateMesh(GLfloat *vertices, GLuint *indices, GLuint numOfVertices, GLuint numOfIndices);
 	void RenderMesh();
-	void ClearMesh();
-
 	~Mesh();
 
 private:
