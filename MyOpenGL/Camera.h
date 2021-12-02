@@ -22,7 +22,7 @@ private:
 	glm::vec3 cameraFront{ 0 };
 	glm::vec3 cameraUp{ 0 };
 	glm::vec3 cameraRight{ 0 };
-	glm::vec3 worldUp{ 0 };
+	glm::vec3 vectorUp{ 0 };
 
 	GLfloat yaw{ 0 }, pitch{ 0 };
 	GLfloat cameraSpeed{ 0 }, mouseSensitivity{ 0 };

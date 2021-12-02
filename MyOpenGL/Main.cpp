@@ -137,6 +137,11 @@ void CreateObjects()
 	Mesh* obj5 = new Mesh();
 	obj5->CreateMesh(verticesPyramid, indicesPyramid, (5 * 3), (6 * 3));
 	meshList.push_back(obj5);
+
+	// Plane
+	Mesh* obj6 = new Mesh();
+	obj6->CreateMesh(verticesSquare, indicesSquare, (8 * 3), (12 * 3));
+	meshList.push_back(obj6);
 }
 
 void CreateShaders()
@@ -151,7 +156,7 @@ int main()
 	mainWindow = new Window(1060, 600);
 	mainWindow->InitialiseWindow();
 	// Camera speed, Mouse sensitivity
-	camera = new Camera(10.0f, 6.0f);
+	camera = new Camera(10.0f, 1.0f);
 
 	CreateObjects();
 	CreateShaders();
@@ -162,7 +167,7 @@ int main()
 	GLuint uniformView{ 0 };
 
 	// Projectionmatrix itself
-	glm::mat4 projection = glm::perspective(45.0f, static_cast<GLfloat>(mainWindow->GetBufferWidth()) / static_cast<GLfloat>(mainWindow->GetBufferHeight()), 0.1f, 100.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<GLfloat>(mainWindow->GetBufferWidth()) / static_cast<GLfloat>(mainWindow->GetBufferHeight()), 0.1f, 100.0f);
 
 	// Loop until window closed
 	while (!glfwWindowShouldClose(mainWindow->mainWindow))
@@ -191,6 +196,7 @@ int main()
 		glm::mat4 triangle{1.0f};
 		glm::mat4 square{1.0f};
 		glm::mat4 pyramid{1.0f};
+		glm::mat4 plane{ 1.0f };
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera->ViewMatrix()));
@@ -216,6 +222,12 @@ int main()
 		pyramid = glm::scale(pyramid, glm::vec3(0.5f, 0.5f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(pyramid));
 		meshList[2]->RenderMesh();
+
+		// Plane
+		plane = glm::translate(plane, glm::vec3(0.0f, -3.5f, -10.0f));
+		plane = glm::scale(plane, glm::vec3(5.0f, 0.05f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(plane));
+		meshList[3]->RenderMesh();
 
 		glUseProgram(0);
 

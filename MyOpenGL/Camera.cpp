@@ -4,9 +4,8 @@ Camera::Camera() { }
 
 Camera::Camera(GLfloat cameraSpeed, GLfloat mouseSensitivity)
 {
-	this->cameraPos = glm::vec3(0.0f, 0.0f, 2.5f);
-	// Up Vector
-	this->worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	this->cameraPos = glm::vec3(0.0f, 0.0f, 10.0f);
+	this->vectorUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	// yaw of 0.0f is pointing to the right
 	this->yaw = -90.0f;
 	this->pitch = 0.0f;
@@ -50,7 +49,9 @@ void Camera::UpdateMouse(GLfloat xOffset, GLfloat yOffset, GLfloat deltaTime)
 	cameraFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	cameraFront = glm::normalize(cameraFront);
 
-	cameraRight = glm::normalize(glm::cross(cameraFront, worldUp));
+	// (1, 0, 0)
+	cameraRight = glm::normalize(glm::cross(cameraFront, vectorUp));
+	// (0, 1, 0)
 	cameraUp = glm::normalize(glm::cross(cameraRight, cameraFront));
 }
 
