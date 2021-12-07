@@ -162,11 +162,11 @@ int main()
 	CreateShaders();
 
 	GLfloat curAngle{ 0.0f };
-	GLuint uniformProjection{0};
-	GLuint uniformModel{0};
+	GLuint uniformProjection{ 0 };
+	GLuint uniformModel{ 0 };
 	GLuint uniformView{ 0 };
 
-	// Projectionmatrix itself
+	// Projection Matrix
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<GLfloat>(mainWindow->GetBufferWidth()) / static_cast<GLfloat>(mainWindow->GetBufferHeight()), 0.1f, 100.0f);
 
 	// Loop until window closed
@@ -192,7 +192,7 @@ int main()
 			uniformView = shaderList[i]->GetUniformView();
 		}
 
-		// initialised 4 x 4 matrix
+		// initialised 4 x 4 Model Matrix for each object
 		glm::mat4 triangle{1.0f};
 		glm::mat4 square{1.0f};
 		glm::mat4 pyramid{1.0f};

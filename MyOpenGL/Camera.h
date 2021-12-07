@@ -19,6 +19,7 @@ public:
 
 private:
 	glm::vec3 cameraPos{ 0 };
+	glm::vec3 cameraDirection{ 0 };
 	glm::vec3 cameraFront{ 0 };
 	glm::vec3 cameraUp{ 0 };
 	glm::vec3 cameraRight{ 0 };
