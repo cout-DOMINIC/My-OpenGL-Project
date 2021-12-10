@@ -39,6 +39,8 @@ int Window::InitialiseWindow()
 	glfwSetCursorPosCallback(mainWindow, MouseCallback);
 	//**********
 
+	// Mauszeiger wird, sobald die Anwendung den Fokus, ausgeblendet und platziert sich in der Mitte des Fensters
+	// Verliert die Anwendung den Fokus oder wird beendet, wird der Mauszeiger wieder eingeblendet
 	glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// vertical synchronization (vsync!)
@@ -80,6 +82,7 @@ void Window::GLFWkeyfun(GLFWwindow* window, int key, int scancode, int action, i
 			w->keys[key] = false;
 	}
 }
+
 
 void Window::MouseCallback(GLFWwindow* window, double xPos, double yPos)
 {
