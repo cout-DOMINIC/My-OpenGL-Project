@@ -1,7 +1,9 @@
 #version 440													
-layout (location = 0) in vec3 pos;								
+layout (location = 0) in vec3 pos;	
+layout (location = 1) in vec2 tex;	 					
 
 out vec4 vertexColor;
+out vec2 TexCoord;
 																
 uniform mat4 model;											    
 
@@ -17,4 +19,6 @@ void main()
 	vertexColor = vec4(clamp(pos, 0.0f, 1.0f), 1.0f);
 	// ohne pos definiere ich die Farben selbst
 	// vertexColor = vec4(0.0f, 1.0f, 0.2f, 1.0f);
+	
+	TexCoord = tex;
 }

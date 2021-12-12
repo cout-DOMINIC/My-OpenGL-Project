@@ -15,6 +15,9 @@
 #include "Mesh.h"
 #include "Shader.h"
 #include "Camera.h"
+#include "Texture.h"
+
+#include <string>
 
 
 // covers range of ascii codes
@@ -30,6 +33,20 @@ std::vector<Mesh*> meshList;
 std::vector<Shader*> shaderList;
 
 Camera* camera;
+
+Texture* brickTexture;
+Texture* dirtTexture;
+//Texture* metalTexture;
+
+std::string dirt = "Textures/dirt.png";
+const char* d = dirt.c_str();
+
+std::string brick = "Textures/brick.png";
+const char* b = brick.c_str();
+
+//std::string metal = "Textures/metal.png";
+//const char* m = metal.c_str();
+
 GLfloat deltaTime{ 0.0f };
 GLfloat lastFrame{ 0.0f };
 
@@ -78,25 +95,25 @@ void CreateObjects()
 		0, 1, 4,
 	};
 
-	GLfloat verticesSquare[8 * 3] =
+	GLfloat verticesSquare[8 * 5] =
 	{
-		// links unten
-		-1.0f, -1.0f, 0.0f,
+		// links unten				// u	// v
+		-1.0f, -1.0f, 0.0f,			//0.0f,	0.0f,
 		// rechts unten
-		 1.0f, -1.0f, 0.0f,
+		 1.0f, -1.0f, 0.0f,			//1.0f,	0.0f,
 		// links oben
-		-1.0f, 1.0f, 0.0f,
+		-1.0f, 1.0f, 0.0f,			//0.0f,	1.0,
 		// rechts oben
-		 1.0f, 1.0f, 0.0f,
+		 1.0f, 1.0f, 0.0f,			//1.1f,	1.1f,
 
 		// links unten hinten
-		-1.0f, -1.0f, 1.0f,
+		-1.0f, -1.0f, 1.0f,			//0.0f,	0.0f,
 		// rechts unten hinten
-		 1.0f, -1.0f, 1.0f,
+		 1.0f, -1.0f, 1.0f,			//1.0f,	0.0f,
 		// links oben hinten
-		-1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,			//0.0f,	1.0f,
 		// rechts oben hinten
-		 1.0f, 1.0f, 1.0f,
+		 1.0f, 1.0f, 1.0f,			//1.1f,	1.1f
 	};
 
 	GLuint indicesPyramid[6 * 3] = {
@@ -127,22 +144,40 @@ void CreateObjects()
 		 0.0f, 1.0f, 0.5f
 	};
 
+	GLuint indicesFloor[2 * 3] =
+	{
+		0, 1, 2,
+		1, 3, 2,
+	};
+
+	GLfloat verticesFloor[4 * 5] =
+	{
+		-10.0f, 0.0f, -10.0f,	0.0f,	0.0f,
+		10.0f, 0.0f, -10.0f,	10.0f,	0.0f,
+		-10.0f,	0.0f,	10.0f,	0.0f,	10.0f,
+		10.0f, 0.0f, 10.0f,	10.0f,	10.0f,
+	};
+
 	// Creating new triangle mesh objects
 	Mesh* obj3 = new Mesh();
 	obj3->CreateMesh(verticesTriangle, indicesTriangle, (4 * 3), (4 * 3));
 	meshList.push_back(obj3);
 
 	Mesh* obj4 = new Mesh();
-	obj4->CreateMesh(verticesSquare, indicesSquare, (8 * 3), (12 * 3));
+	obj4->CreateMesh(verticesSquare, indicesSquare, (8 * 5), (12 * 3));
 	meshList.push_back(obj4);
 
 	Mesh* obj5 = new Mesh();
 	obj5->CreateMesh(verticesPyramid, indicesPyramid, (5 * 3), (6 * 3));
 	meshList.push_back(obj5);
 
-	// Plane
 	Mesh* obj6 = new Mesh();
-	obj6->CreateMesh(verticesSquare, indicesSquare, (8 * 3), (12 * 3));
+	obj6->CreateMesh(verticesFloor, indicesFloor, (4 * 5), (2 * 3));
+	meshList.push_back(obj6);
+
+	// Plane
+	Mesh* obj7 = new Mesh();
+	obj7->CreateMesh(verticesSquare, indicesSquare, (8 * 3), (12 * 3));
 	meshList.push_back(obj6);
 }
 
@@ -159,6 +194,14 @@ int main()
 	mainWindow->InitialiseWindow();
 	// Camera speed, Mouse sensitivity
 	camera = new Camera(10.0f, 1.0f);
+
+	dirtTexture = new Texture(d);
+	dirtTexture->LoadTexture();
+	brickTexture = new Texture(b);
+	brickTexture->LoadTexture();
+	//metalTexture = new Texture(m);
+	//metalTexture->LoadTexture();
+
 
 	CreateObjects();
 	CreateShaders();
@@ -200,36 +243,63 @@ int main()
 		glm::mat4 pyramid{1.0f};
 		glm::mat4 plane{ 1.0f };
 
+		glm::mat4 plane2{ 1.0f };
+
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera->ViewMatrix()));
 		curAngle += 0.3f;
 
 		// Triangle
-		triangle = glm::translate(triangle, glm::vec3(-2.0f, 0.0f, -4.5f));
-		triangle = glm::rotate(triangle, curAngle * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		triangle = glm::scale(triangle, glm::vec3(0.3f, 0.3f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(triangle));
-		meshList[0]->RenderMesh();
+		{
+			triangle = glm::translate(triangle, glm::vec3(-2.0f, 0.0f, -4.5f));
+			triangle = glm::rotate(triangle, curAngle * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			triangle = glm::scale(triangle, glm::vec3(0.3f, 0.3f, 1.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(triangle));
+			brickTexture->UseTexture();
+			meshList[0]->RenderMesh();
+		}
 
 		// Square
-		square = glm::translate(square, glm::vec3(2.4f, 0.0f, -6.0f));
-		square = glm::rotate(square, curAngle * toRadians, glm::vec3(-1.0f, -1.0f, 1.0f));
-		square = glm::scale(square, glm::vec3(0.3f, 0.3f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(square));
-		meshList[1]->RenderMesh();
+		{
+			square = glm::translate(square, glm::vec3(2.4f, 0.0f, -6.0f));
+			square = glm::rotate(square, curAngle * toRadians, glm::vec3(-1.0f, -1.0f, 1.0f));
+			square = glm::scale(square, glm::vec3(0.3f, 0.3f, 1.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(square));
+			brickTexture->UseTexture();
+			meshList[1]->RenderMesh();
+		}
 
 		// Pyramid
-		pyramid = glm::translate(pyramid, glm::vec3(0.0f, -0.5f, -4.0f));
-		pyramid = glm::rotate(pyramid, curAngle * toRadians, glm::vec3(-1.0f, -1.0f, -1.0f));
-		pyramid = glm::scale(pyramid, glm::vec3(0.5f, 0.5f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(pyramid));
-		meshList[2]->RenderMesh();
+		{
+			pyramid = glm::translate(pyramid, glm::vec3(0.0f, -0.5f, -4.0f));
+			pyramid = glm::rotate(pyramid, curAngle * toRadians, glm::vec3(-1.0f, -1.0f, -1.0f));
+			pyramid = glm::scale(pyramid, glm::vec3(0.5f, 0.5f, 1.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(pyramid));
+			brickTexture->UseTexture();
+			meshList[2]->RenderMesh();
+		}
 
 		// Plane
-		plane = glm::translate(plane, glm::vec3(0.0f, -3.5f, -10.0f));
-		plane = glm::scale(plane, glm::vec3(5.0f, 0.05f, 10.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(plane));
-		meshList[3]->RenderMesh();
+		{
+			//// new Scope for dirt Texture on Plane
+			//plane = glm::translate(plane, glm::vec3(0.0f, -3.5f, -10.0f));
+			//plane = glm::scale(plane, glm::vec3(5.0f, 0.05f, 10.0f));
+			//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(plane));
+			////metalTexture->UseTexture();
+			//dirtTexture->UseTexture();
+			//meshList[3]->RenderMesh();
+		}
+
+		// Plane New
+		{
+			// new Scope for dirt Texture on Plane
+			plane2 = glm::translate(plane2, glm::vec3(0.0f, -3.5f, -10.0f));
+			plane2 = glm::scale(plane2, glm::vec3(2.0f, 0.05f, 2.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(plane2));
+			//metalTexture->UseTexture();
+			dirtTexture->UseTexture();
+			meshList[3]->RenderMesh();
+		}
 
 		glUseProgram(0);
 
