@@ -21,6 +21,7 @@ Texture::Texture(const char* fileLocation)
 void Texture::LoadTexture()
 {
 	unsigned char* textureData = stbi_load(fileLocation, &width, &height, &bitDepth, 0);
+
 	if (!textureData)
 	{
 		printf("Failed to find: %s\n", fileLocation);
