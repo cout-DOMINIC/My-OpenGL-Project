@@ -40,6 +40,8 @@ Texture* metalTexture;
 Texture* cloudTexture;
 Texture* rustTexture;
 Texture* goldTexture;
+Texture* concreteTexture;
+Texture* grayTexture;
 
 // Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
 std::string dirt = "Textures/dirt.png";
@@ -64,6 +66,14 @@ const char* r = rust.c_str();
 // Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
 std::string gold = "Textures/gold.png";
 const char* g = gold.c_str();
+
+// Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
+std::string concrete = "Textures/concrete.png";
+const char* con = concrete.c_str();
+
+// Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
+std::string gray = "Textures/gray.png";
+const char* gr = gray.c_str();
 
 GLfloat deltaTime{ 0.0f };
 GLfloat lastFrame{ 0.0f };
@@ -181,6 +191,7 @@ void CreateObjects()
 	GLfloat verticesFloor[4 * 5] =
 	{
 		// 10 to make floor larger
+	//	  X		 Y	   Z			 U		 V
 		-10.0f, 0.0f, -10.0f,		0.0f,	0.0f,
 		10.0f, 0.0f, -10.0f,		10.0f,	0.0f,
 		-10.0f,	0.0f, 10.0f,		0.0f,	10.0f,
@@ -251,15 +262,7 @@ void CreateObjects()
 	obj4->CreateMesh(verticesHouse, indicesHouse, (8 * 5), (12 * 3));
 	meshList.push_back(obj4);
 
-
-
-
-
-
-
-
-
-
+	// Walls
 	Mesh* obj5 = new Mesh();
 	obj5->CreateMesh(verticesSquare, indicesSquare, (8 * 5), (12 * 3));
 	meshList.push_back(obj5);
@@ -287,7 +290,6 @@ void CreateObjects()
 	Mesh* obj11 = new Mesh();
 	obj11->CreateMesh(verticesSquare, indicesSquare, (8 * 5), (12 * 3));
 	meshList.push_back(obj11);
-
 }
 
 void CreateShaders()
@@ -337,6 +339,10 @@ int main()
 	rustTexture->LoadTexture();
 	goldTexture = new Texture(g);
 	goldTexture->LoadTexture();
+	concreteTexture = new Texture(con);
+	concreteTexture->LoadTexture();
+	grayTexture = new Texture(gr);
+	grayTexture->LoadTexture();
 
 	CreateObjects();
 	CreateShaders();
@@ -377,6 +383,7 @@ int main()
 		glm::mat4 triangle{ 1.0f };
 		glm::mat4 square{ 1.0f };
 		glm::mat4 pyramid{ 1.0f };
+		glm::mat4 pyramidStable{ 1.0f };
 		glm::mat4 plane{ 1.0f };
 		glm::mat4 house{ 1.0f };
 
@@ -397,7 +404,7 @@ int main()
 
 		// Triangle
 		{
-			triangle = glm::translate(triangle, glm::vec3(-2.0f, 0.0f, -4.5f));
+			triangle = glm::translate(triangle, glm::vec3(-2.5f, 0.0f, -4.0f));
 			triangle = glm::rotate(triangle, angle * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 			triangle = glm::scale(triangle, glm::vec3(0.3f, 0.3f, 1.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(triangle));
@@ -407,7 +414,7 @@ int main()
 
 		// Square
 		{
-			square = glm::translate(square, glm::vec3(2.4f, 0.0f, -6.0f));
+			square = glm::translate(square, glm::vec3(2.5f, 0.0f, -4.0f));
 			square = glm::rotate(square, angle * toRadians, glm::vec3(-1.0f, -1.0f, 1.0f));
 			square = glm::scale(square, glm::vec3(0.3f, 0.3f, 1.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(square));
@@ -417,11 +424,21 @@ int main()
 
 		// Pyramid
 		{
-			pyramid = glm::translate(pyramid, glm::vec3(0.0f, -0.5f, -4.0f));
+			pyramid = glm::translate(pyramid, glm::vec3(0.0f, 2.0f, -4.0f));
 			pyramid = glm::rotate(pyramid, angle * toRadians, glm::vec3(-1.0f, -1.0f, -1.0f));
 			pyramid = glm::scale(pyramid, glm::vec3(0.5f, 0.5f, 1.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(pyramid));
-			cloudTexture->UseTexture();
+			grayTexture->UseTexture();
+			meshList[2]->RenderMesh();
+		}
+
+		// PyramidStable
+		{
+			pyramidStable = glm::translate(pyramidStable, glm::vec3(0.0f, -1.0f, -22.0f));
+			pyramidStable = glm::rotate(pyramidStable, 180.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			pyramidStable = glm::scale(pyramidStable, glm::vec3(3.5f, 3.5f, 6.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(pyramidStable));
+			concreteTexture->UseTexture();
 			meshList[2]->RenderMesh();
 		}
 

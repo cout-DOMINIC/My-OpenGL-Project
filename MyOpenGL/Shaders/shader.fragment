@@ -10,7 +10,9 @@ uniform sampler2D theTexture;
 																
 void main()														
 {																
-	 // color = u_Color;                                         
-	 // color = vertexColor;
-	color = texture(theTexture, TexCoord);	 
+	// color = u_Color;                                         
+	// color = vertexColor;
+	// Multipliziert mit vertexColor sorgt für ein farbiges Bild!
+	// color = texture(theTexture, TexCoord) * vertexColor;
+	color = texture(theTexture, TexCoord);
 }

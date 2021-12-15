@@ -1,6 +1,4 @@
 ﻿  Main.cpp
-C:\dev\MyOpenGL\MyOpenGL\Main.cpp(356,24): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-C:\dev\MyOpenGL\MyOpenGL\Main.cpp(368,20): warning C4018: '<': signed/unsigned mismatch
-  Texture.cpp
-  Generating Code...
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(362,24): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(374,20): warning C4018: '<': signed/unsigned mismatch
   MyOpenGL.vcxproj -> C:\dev\MyOpenGL\Debug\MyOpenGL.exe
