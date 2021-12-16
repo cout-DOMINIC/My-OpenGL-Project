@@ -19,7 +19,6 @@
 
 #include <string>
 
-
 // covers range of ascii codes
 bool keys[1024];
 // Window dimensions
