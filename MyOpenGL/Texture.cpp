@@ -40,18 +40,18 @@ void Texture::LoadTexture()
 
 void Texture::UseTexture()
 {
-	glActiveTexture(GL_TEXTURE0);
+	//glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 }
 
 void Texture::ClearTexture()
 {
-	glDeleteTextures(1, &textureID);
-	this->textureID = 0;
-	this->width = 0;
-	this->height = 0;
-	this->bitDepth = 0;
-	this->fileLocation = nullptr;
+	//glDeleteTextures(1, &textureID);
+	//this->textureID = 0;
+	//this->width = 0;
+	//this->height = 0;
+	//this->bitDepth = 0;
+	//this->fileLocation = nullptr;
 }
 
 Texture::~Texture()

@@ -19,6 +19,9 @@
 
 #include <string>
 
+
+#include <assimp/Importer.hpp>
+
 // covers range of ascii codes
 bool keys[1024];
 // Window dimensions
@@ -354,6 +357,10 @@ int main()
 
 	// Projection Matrix
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<GLfloat>(mainWindow->GetBufferWidth()) / static_cast<GLfloat>(mainWindow->GetBufferHeight()), 0.1f, 100.0f);
+
+
+	//Assimp::Importer importer = Assimp::Importer();
+
 
 	// Loop until window closed
 	while (!glfwWindowShouldClose(mainWindow->mainWindow))
