@@ -19,8 +19,7 @@
 
 #include <string>
 
-
-#include <assimp/Importer.hpp>
+// #include "Model.h"
 
 // covers range of ascii codes
 bool keys[1024];
@@ -44,6 +43,11 @@ Texture* rustTexture;
 Texture* goldTexture;
 Texture* concreteTexture;
 Texture* grayTexture;
+
+
+// Model xwing;
+// Model blackhawk;
+
 
 // Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
 std::string dirt = "Textures/dirt.png";
@@ -324,27 +328,41 @@ void CalculateOffset()
 
 int main()
 {
+
+
+	printf("HALLOOOOOOOOOOOOO");
+
+
+
 	mainWindow = new Window(1060, 600);
 	mainWindow->InitialiseWindow();
 	// Camera speed, Mouse sensitivity
 	camera = new Camera(10.0f, 1.0f);
 
 	dirtTexture = new Texture(d);
-	dirtTexture->LoadTexture();
+	dirtTexture->LoadTextureA();
 	brickTexture = new Texture(b);
-	brickTexture->LoadTexture();
+	brickTexture->LoadTextureA();
 	metalTexture = new Texture(m);
-	metalTexture->LoadTexture();
+	metalTexture->LoadTextureA();
 	cloudTexture = new Texture(c);
-	cloudTexture->LoadTexture();
+	cloudTexture->LoadTextureA();
 	rustTexture = new Texture(r);
-	rustTexture->LoadTexture();
+	rustTexture->LoadTextureA();
 	goldTexture = new Texture(g);
-	goldTexture->LoadTexture();
+	goldTexture->LoadTextureA();
 	concreteTexture = new Texture(con);
-	concreteTexture->LoadTexture();
+	concreteTexture->LoadTextureA();
 	grayTexture = new Texture(gr);
-	grayTexture->LoadTexture();
+	grayTexture->LoadTextureA();
+
+
+
+	// xwing = Model();
+	// xwing.LoadModel("Models/x-wing.obj");
+	// blackhawk = Model();
+	// blackhawk.LoadModel("Models/uh60.obj");
+
 
 	CreateObjects();
 	CreateShaders();
@@ -357,10 +375,6 @@ int main()
 
 	// Projection Matrix
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<GLfloat>(mainWindow->GetBufferWidth()) / static_cast<GLfloat>(mainWindow->GetBufferHeight()), 0.1f, 100.0f);
-
-
-	//Assimp::Importer importer = Assimp::Importer();
-
 
 	// Loop until window closed
 	while (!glfwWindowShouldClose(mainWindow->mainWindow))
@@ -400,6 +414,8 @@ int main()
 		glm::mat4 wall5{ 1.0f };
 		glm::mat4 top{ 1.0f };
 		glm::mat4 item{ 1.0f };
+
+		glm::mat4 xwingModel{ 1.0f };
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera->ViewMatrix()));
@@ -536,6 +552,21 @@ int main()
 			meshList[10]->RenderMesh();
 		}
 
+		/*
+		// Xwing
+		item = glm::mat4(1.0f);
+		item = glm::translate(item, glm::vec3(-7.0f, 0.0f, 10.0f));
+		item = glm::scale(item, glm::vec3(0.006f, 0.006f, 0.006f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(item));
+		// xwing.RenderModel();
+
+		item = glm::mat4(1.0f);
+		item = glm::translate(item, glm::vec3(-3.0f, 2.0f, 0.0f));
+		item = glm::rotate(item, -90.0f * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		item = glm::scale(item, glm::vec3(0.4f, 0.4f, 0.4f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(item));
+		// blackhawk.RenderModel();
+		*/
 		glUseProgram(0);
 
 		// Swap front and back buffers
