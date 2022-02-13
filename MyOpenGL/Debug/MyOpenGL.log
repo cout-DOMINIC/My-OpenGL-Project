@@ -1,6 +1,12 @@
-﻿  Model.cpp
-C:\dev\MyOpenGL\Dependencies\ASSIMP\include\assimp\defs.h(55,10): fatal error C1083: Cannot open include file: 'assimp/config.h': No such file or directory
+﻿  Camera.cpp
+  Main.cpp
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(375,24): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(387,22): warning C4018: '<': signed/unsigned mismatch
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(556,4): error C2065: 'blackhawk': undeclared identifier
+  Mesh.cpp
+  Model.cpp
   Shader.cpp
+  Texture.cpp
   Window.cpp
 C:\dev\MyOpenGL\MyOpenGL\Window.cpp(93,14): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
 C:\dev\MyOpenGL\MyOpenGL\Window.cpp(94,14): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data

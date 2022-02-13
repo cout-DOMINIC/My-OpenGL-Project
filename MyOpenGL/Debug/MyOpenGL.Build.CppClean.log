@@ -3,10 +3,13 @@ c:\dev\myopengl\myopengl\debug\vc142.idb
 c:\dev\myopengl\myopengl\debug\window.obj
 c:\dev\myopengl\myopengl\debug\texture.obj
 c:\dev\myopengl\myopengl\debug\shader.obj
-c:\dev\myopengl\myopengl\debug\model.obj
 c:\dev\myopengl\myopengl\debug\mesh.obj
 c:\dev\myopengl\myopengl\debug\main.obj
 c:\dev\myopengl\myopengl\debug\camera.obj
+c:\dev\myopengl\myopengl\debug\model.obj
+c:\dev\myopengl\debug\myopengl.ilk
+c:\dev\myopengl\debug\myopengl.exe
+c:\dev\myopengl\debug\myopengl.pdb
 c:\dev\myopengl\myopengl\debug\myopengl.tlog\cl.command.1.tlog
 c:\dev\myopengl\myopengl\debug\myopengl.tlog\cl.read.1.tlog
 c:\dev\myopengl\myopengl\debug\myopengl.tlog\cl.write.1.tlog

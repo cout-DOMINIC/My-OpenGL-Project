@@ -6,13 +6,23 @@ in vec2 TexCoord;
 
 // uniform vec4 u_Color;	
 
-uniform sampler2D theTexture;							
+struct DirectionalLight 
+{
+	vec3 color;
+	float ambientIntensity;
+};
+
+uniform sampler2D theTexture;
+
+uniform DirectionalLight directionalLight;							
 																
 void main()														
-{																
+{	
+	vec4 ambientColor = vec4(directionalLight.color, 1.0f) * directionalLight.ambientIntensity;
 	// color = u_Color;                                         
 	// color = vertexColor;
 	// Multipliziert mit vertexColor sorgt für ein farbiges Bild!
 	// color = texture(theTexture, TexCoord) * vertexColor;
-	color = texture(theTexture, TexCoord);
+	
+	color = texture(theTexture, TexCoord) * ambientColor;
 }

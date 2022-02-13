@@ -1,10 +1,12 @@
 ﻿  Main.cpp
-C:\dev\MyOpenGL\MyOpenGL\Main.cpp(382,24): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-C:\dev\MyOpenGL\MyOpenGL\Main.cpp(394,20): warning C4018: '<': signed/unsigned mismatch
-  Model.cpp
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(370,24): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(382,22): warning C4018: '<': signed/unsigned mismatch
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(393,47): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(393,22): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
+  Shader.cpp
   Generating code
-  Previous IPDB not found, fall back to full compilation.
-C:\dev\MyOpenGL\MyOpenGL\Window.cpp(67): warning C4715: 'Window::InitialiseWindow': not all control paths return a value
-  All 514 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  3 of 521 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    8 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   MyOpenGL.vcxproj -> C:\dev\MyOpenGL\Release\MyOpenGL.exe

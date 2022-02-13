@@ -17,10 +17,12 @@ public:
 	GLuint GetUniformProjection() { return uniformProjection; }
 	GLuint GetUniformModel() { return uniformModel; }
 	GLuint GetUniformView() { return uniformView; }
+	GLuint GetAmbientIntensityLocation() { return uniformAmbientIntensity; };
+	GLuint GetAmbientColorLocation() { return uniformAmbientColor; };
 	~Shader();
 
 private:
-	GLuint shaderID{ 0 }, uniformProjection{ 0 }, uniformModel{ 0 }, uniformView{ 0 };
+	GLuint shaderID{ 0 }, uniformProjection{ 0 }, uniformModel{ 0 }, uniformView{ 0 }, uniformAmbientIntensity{ 0 }, uniformAmbientColor{ 0 };
 	void CompileShader(const char* vertexCode, const char* fragmentCode);
 	void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType);
 };

@@ -16,15 +16,14 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Texture.h"
+#include "Light.h"
 
 #include <string>
-
-// #include "Model.h"
 
 // covers range of ascii codes
 bool keys[1024];
 // Window dimensions
-const GLint WIDTH = 1024, HEIGHT = 768;
+const GLint WIDTH = 1920, HEIGHT = 1080;
 // Bogenmaß (für Winkel)
 const GLfloat toRadians{ 3.14159265f / 180.0f };
 
@@ -44,10 +43,7 @@ Texture* goldTexture;
 Texture* concreteTexture;
 Texture* grayTexture;
 
-
-// Model xwing;
-// Model blackhawk;
-
+Light mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f);
 
 // Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
 std::string dirt = "Textures/dirt.png";
@@ -97,6 +93,10 @@ GLfloat increment = 0.008f;
 
 // Creating Fragment Shader itself
 /*static*/ const char* FragmentShader = "Shaders/shader.fragment";
+
+
+
+
 
 void CreateObjects()
 {
@@ -328,12 +328,6 @@ void CalculateOffset()
 
 int main()
 {
-
-
-	printf("HALLOOOOOOOOOOOOO");
-
-
-
 	mainWindow = new Window(1060, 600);
 	mainWindow->InitialiseWindow();
 	// Camera speed, Mouse sensitivity
@@ -356,14 +350,6 @@ int main()
 	grayTexture = new Texture(gr);
 	grayTexture->LoadTextureA();
 
-
-
-	// xwing = Model();
-	// xwing.LoadModel("Models/x-wing.obj");
-	// blackhawk = Model();
-	// blackhawk.LoadModel("Models/uh60.obj");
-
-
 	CreateObjects();
 	CreateShaders();
 
@@ -372,6 +358,8 @@ int main()
 	GLuint uniformProjection{ 0 };
 	GLuint uniformModel{ 0 };
 	GLuint uniformView{ 0 };	
+	GLuint uniformAmbientIntensity{ 0 };
+	GLuint uniformAmbientColor{ 0 };
 
 	// Projection Matrix
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<GLfloat>(mainWindow->GetBufferWidth()) / static_cast<GLfloat>(mainWindow->GetBufferHeight()), 0.1f, 100.0f);
@@ -391,13 +379,18 @@ int main()
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		for (int i{0}; i < shaderList.size(); ++i)
+		for (int i{ 0 }; i < shaderList.size(); ++i)
 		{
 			shaderList[0]->UseShaderProgram();
 			uniformModel = shaderList[0]->GetUniformModel();
 			uniformProjection = shaderList[0]->GetUniformProjection();
 			uniformView = shaderList[0]->GetUniformView();
+
+			uniformAmbientColor = shaderList[0]->GetAmbientColorLocation();
+			uniformAmbientIntensity = shaderList[0]->GetAmbientIntensityLocation();
 		}
+
+		mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor);
 
 		// initialised 4 x 4 Model Matrix for each object
 		glm::mat4 triangle{ 1.0f };
@@ -415,7 +408,9 @@ int main()
 		glm::mat4 top{ 1.0f };
 		glm::mat4 item{ 1.0f };
 
-		glm::mat4 xwingModel{ 1.0f };
+		glm::mat4 xwingModel(1.0f);
+
+		glm::mat4 heliModel(1.0f);
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera->ViewMatrix()));
@@ -490,8 +485,8 @@ int main()
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(wall1));
 			metalTexture->UseTexture();
 			meshList[5]->RenderMesh();
-		}		
-		
+		}
+
 		// Wall 2
 		{
 			wall2 = glm::translate(wall2, glm::vec3(-13.0f, -2.5f, -13.0f));
@@ -552,21 +547,6 @@ int main()
 			meshList[10]->RenderMesh();
 		}
 
-		/*
-		// Xwing
-		item = glm::mat4(1.0f);
-		item = glm::translate(item, glm::vec3(-7.0f, 0.0f, 10.0f));
-		item = glm::scale(item, glm::vec3(0.006f, 0.006f, 0.006f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(item));
-		// xwing.RenderModel();
-
-		item = glm::mat4(1.0f);
-		item = glm::translate(item, glm::vec3(-3.0f, 2.0f, 0.0f));
-		item = glm::rotate(item, -90.0f * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		item = glm::scale(item, glm::vec3(0.4f, 0.4f, 0.4f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(item));
-		// blackhawk.RenderModel();
-		*/
 		glUseProgram(0);
 
 		// Swap front and back buffers
