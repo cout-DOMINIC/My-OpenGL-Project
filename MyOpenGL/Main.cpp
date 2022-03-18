@@ -18,8 +18,6 @@
 #include "Camera.h"
 #include "Texture.h"
 #include "Light.h"
-
-
 #include "Primitives.h"
 
 // covers range of ascii codes
@@ -31,11 +29,7 @@ const GLfloat toRadians{ 3.14159265f / 180.0f };
 
 Window* mainWindow;
 Camera* camera;
-
-
 Primitives primitives;
-
-
 
 std::vector<Mesh*> meshList;
 std::vector<Shader*> shaderList;
@@ -50,7 +44,7 @@ Texture* concreteTexture;
 Texture* grayTexture;
 
 // last argument is to alter light intesity
-Light ambientLight = Light(1.0f, 1.0f, 1.0f, 0.7f);
+Light ambientLight = Light(1.0f, 1.0f, 1.0f, 0.5f);
 
 std::string dirt = "Textures/dirt.png";
 const char* d = dirt.c_str();
@@ -95,184 +89,58 @@ GLfloat increment = 0.008f;
 
 void CreateObjects()
 {
-	GLuint indicesSquare[12 * 3] = {
-		// Front
-		0, 1, 2,
-		1, 3, 2,
-		// rechte Seite
-		1, 3, 5,
-		3, 5, 7,
-		// Back
-		4, 6, 5,
-		6, 7, 5,
-		// Left Side
-		2, 4, 6,
-		0, 2, 4,
-		// Top
-		2, 3, 7,
-		2, 7, 6,
-		// Bottom
-		1, 4, 5,
-		0, 1, 4,
-	};
-
-	GLfloat verticesSquare[8 * 5] =
-	{
-	//	  X		 Y	   Z			 U		 V
-		-1.0f, -1.0f, 0.0f,			0.0f,	0.0f,
-		// rechts unten
-		 1.0f, -1.0f, 0.0f,			1.0f,	0.0f,
-		// links oben
-		-1.0f, 1.0f, 0.0f,			0.0f,	2.0f,
-		// rechts oben
-		 1.0f, 1.0f, 0.0f,			1.0f,	1.0f,
-
-		// links unten hinten
-		-1.0f, -1.0f, 1.0f,			1.0f,	1.0f,
-		// rechts unten hinten
-		 1.0f, -1.0f, 1.0f,			2.0f,	0.0f,
-		// links oben hinten
-		-1.0f, 1.0f, 1.0f,			0.0f,	1.0f,
-		// rechts oben hinten
-		 1.0f, 1.0f, 1.0f,			2.0f,	2.0f
-	};
-
-	GLuint indicesPyramid[6 * 3] = {
-		// Front
-		0, 1, 2,
-		// rechte Seite
-		1, 3, 2,
-		// Back
-		3, 4, 2,
-		// Left Side
-		4, 0, 2,
-		// Bottom
-		0, 1, 4,
-		1, 3, 4
-	};
-
-	GLfloat verticesPyramid[5 * 5] =
-	{
-	//	  X		 Y	   Z			 U		 V
-		// left down
-		-1.0f, -1.0f, 0.0f,			0.0f,	0.0f,
-		// right down
-		 1.0f, -1.0f, 0.0f,			1.0f,	0.0f,
-		// left back
-	    -1.0f, -1.0f, 1.0f,			1.0f,	1.0f,
-		// right back
-		 1.0f, -1.0f, 1.0f,			2.0f,	0.0f,
-		// peak
-		 0.0f, 1.0f, 0.5f,			0.5f,	1.0f,
-	};
-
-	GLuint indicesFloor[2 * 3] =
-	{
-		0, 1, 2,
-		1, 3, 2,
-	};
-
-	GLfloat verticesFloor[4 * 5] =
-	{
-		// 10 to make floor larger
-	//	  X		 Y	   Z			 U		 V
-		-10.0f, 0.0f, -10.0f,		0.0f,	0.0f,
-		10.0f, 0.0f, -10.0f,		10.0f,	0.0f,
-		-10.0f,	0.0f, 10.0f,		0.0f,	10.0f,
-		10.0f, 0.0f, 10.0f,			10.0f,	10.0f,
-	};
-
-	GLuint indicesHouse[12 * 3] = {
-		// Front
-		0, 1, 2,
-		1, 3, 2,
-		// rechte Seite
-		1, 3, 5,
-		3, 5, 7,
-		// Back
-		4, 6, 5,
-		6, 7, 5,
-		// Left Side
-		2, 4, 6,
-		0, 2, 4,
-		// Top
-		2, 3, 7,
-		2, 7, 6,
-		// Bottom
-		1, 4, 5,
-		0, 1, 4,
-	};
-
-	GLfloat verticesHouse[8 * 5] =
-	{
-	//	  X		 Y	   Z			 U		 V
-		-1.0f, -1.0f, 0.0f,			0.0f,	0.0f,
-		// rechts unten
-		 1.0f, -1.0f, 0.0f,			3.0f,	0.0f,
-		 // links oben
-		-1.0f, 1.0f, 0.0f,			0.0f,	4.0f,
-		 // rechts oben
-		 1.0f, 1.0f, 0.0f,			3.0f,	3.0f,
-
-		  // links unten hinten
-		-1.0f, -1.0f, 1.0f,			3.0f,	3.0f,
-		  // rechts unten hinten
-		 1.0f, -1.0f, 1.0f,			4.0f,	0.0f,
-		   // links oben hinten
-		-1.0f, 1.0f, 1.0f,			0.0f,	3.0f,
-		   // rechts oben hinten
-		 1.0f, 1.0f, 1.0f,			4.0f,	4.0f
-	};
-
-	// Creating new triangle mesh objects
+	// Triangle
 	Mesh* obj0 = new Mesh();
 	obj0->CreateMesh(primitives.verticesTriangle, primitives.indicesTriangle, (4 * 5), (4 * 3));
 	meshList.push_back(obj0);
 
+	// Square
 	Mesh* obj1 = new Mesh();
-	obj1->CreateMesh(verticesSquare, indicesSquare, (8 * 5), (12 * 3));
+	obj1->CreateMesh(primitives.verticesSquare, primitives.indicesSquare, (8 * 5), (12 * 3));
 	meshList.push_back(obj1);
 
+	// Pyramid
 	Mesh* obj2 = new Mesh();
-	obj2->CreateMesh(verticesPyramid, indicesPyramid, (5 * 5), (6 * 3));
+	obj2->CreateMesh(primitives.verticesPyramid, primitives.indicesPyramid, (5 * 5), (6 * 3));
 	meshList.push_back(obj2);
 
+	// Floor
 	Mesh* obj3 = new Mesh();
-	obj3->CreateMesh(verticesFloor, indicesFloor, (4 * 5), (2 * 3));
+	obj3->CreateMesh(primitives.verticesFloor, primitives.indicesFloor, (4 * 5), (2 * 3));
 	meshList.push_back(obj3);
 
 	// House
 	Mesh* obj4 = new Mesh();
-	obj4->CreateMesh(verticesHouse, indicesHouse, (8 * 5), (12 * 3));
+	obj4->CreateMesh(primitives.verticesHouse, primitives.indicesHouse, (8 * 5), (12 * 3));
 	meshList.push_back(obj4);
 
 	// Walls
 	Mesh* obj5 = new Mesh();
-	obj5->CreateMesh(verticesSquare, indicesSquare, (8 * 5), (12 * 3));
+	obj5->CreateMesh(primitives.verticesSquare, primitives.indicesSquare, (8 * 5), (12 * 3));
 	meshList.push_back(obj5);
 
 	Mesh* obj6 = new Mesh();
-	obj6->CreateMesh(verticesSquare, indicesSquare, (8 * 5), (12 * 3));
+	obj6->CreateMesh(primitives.verticesSquare, primitives.indicesSquare, (8 * 5), (12 * 3));
 	meshList.push_back(obj6);
 
 	Mesh* obj7 = new Mesh();
-	obj7->CreateMesh(verticesSquare, indicesSquare, (8 * 5), (12 * 3));
+	obj7->CreateMesh(primitives.verticesSquare, primitives.indicesSquare, (8 * 5), (12 * 3));
 	meshList.push_back(obj7);
 
 	Mesh* obj8 = new Mesh();
-	obj8->CreateMesh(verticesSquare, indicesSquare, (8 * 5), (12 * 3));
+	obj8->CreateMesh(primitives.verticesSquare, primitives.indicesSquare, (8 * 5), (12 * 3));
 	meshList.push_back(obj8);
 
 	Mesh* obj9 = new Mesh();
-	obj9->CreateMesh(verticesSquare, indicesSquare, (8 * 5), (12 * 3));
+	obj9->CreateMesh(primitives.verticesSquare, primitives.indicesSquare, (8 * 5), (12 * 3));
 	meshList.push_back(obj9);
 
 	Mesh* obj10 = new Mesh();
-	obj10->CreateMesh(verticesSquare, indicesSquare, (8 * 5), (12 * 3));
+	obj10->CreateMesh(primitives.verticesSquare, primitives.indicesSquare, (8 * 5), (12 * 3));
 	meshList.push_back(obj10);
 
 	Mesh* obj11 = new Mesh();
-	obj11->CreateMesh(verticesSquare, indicesSquare, (8 * 5), (12 * 3));
+	obj11->CreateMesh(primitives.verticesSquare, primitives.indicesSquare, (8 * 5), (12 * 3));
 	meshList.push_back(obj11);
 }
 
@@ -286,22 +154,14 @@ void CreateShaders()
 void CalculateOffset()
 {
 	if (direction)
-	{
 		offset += increment;
-	}
 	else
-	{
 		offset -= increment;
-	}
 
 	if (offset >= maxOffset)
-	{
 		direction = !direction;
-	}
 	else if (offset <= minOffset)
-	{
 		direction = true;
-	}
 }
 
 int main()
@@ -309,7 +169,7 @@ int main()
 	mainWindow = new Window(1060, 600);
 	mainWindow->InitialiseWindow();
 	// Camera speed, Mouse sensitivity
-	camera = new Camera(10.0f, 1.0f);
+	camera = new Camera(12.0f, 1.0f);
 
 	dirtTexture = new Texture(d);
 	dirtTexture->LoadTextureA();
@@ -342,15 +202,10 @@ int main()
 	// Projection Matrix
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<GLfloat>(mainWindow->GetBufferWidth()) / static_cast<GLfloat>(mainWindow->GetBufferHeight()), 0.1f, 100.0f);
 
-
-
-
 	// Loop until window closed
 	while (!glfwWindowShouldClose(mainWindow->mainWindow))
 	{
-
-
-
+		// Delta Time
 		GLfloat currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
@@ -358,40 +213,20 @@ int main()
 		camera->ProcessKeyboardInput(mainWindow->GetKeys(), deltaTime);
 		camera->UpdateMouse(mainWindow->PreventXoffsetMoving(), mainWindow->PreventYoffsetMoving(), deltaTime);
 
-
-
-
 		// Clear window
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
 		for (int i{ 0 }; i < shaderList.size(); ++i)
 		{
-
 			shaderList[0]->UseShaderProgram();
-
 			uniformModel = shaderList[0]->GetUniformModel();
-
-
-
-
 			uniformProjection = shaderList[0]->GetUniformProjection();
 			uniformView = shaderList[0]->GetUniformView();
-
-
-
 			uniformAmbientColor = shaderList[0]->GetAmbientColorLocation();
 			uniformAmbientIntensity = shaderList[0]->GetAmbientIntensityLocation();
 		}
-
-
-
 		ambientLight.CreateLight(uniformAmbientIntensity, uniformAmbientColor);
-
-
-
 
 		// initialised 4 x 4 Model Matrix for each object
 		glm::mat4 triangle{ 1.0f };
@@ -400,7 +235,6 @@ int main()
 		glm::mat4 pyramidStable{ 1.0f };
 		glm::mat4 plane{ 1.0f };
 		glm::mat4 house{ 1.0f };
-
 		glm::mat4 wall1{ 1.0f };
 		glm::mat4 wall2{ 1.0f };
 		glm::mat4 wall3{ 1.0f };
@@ -408,8 +242,6 @@ int main()
 		glm::mat4 wall5{ 1.0f };
 		glm::mat4 top{ 1.0f };
 		glm::mat4 item{ 1.0f };
-
-
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera->ViewMatrix()));
@@ -536,7 +368,7 @@ int main()
 			meshList[9]->RenderMesh();
 		}
 
-		// Item
+		// Gold Item
 		{
 			item = glm::translate(item, glm::vec3(-13.0f, offset, -15.0f));
 			item = glm::rotate(item, itemAngle * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -547,7 +379,6 @@ int main()
 		}
 
 		glUseProgram(0);
-
 		// Swap front and back buffers
 		glfwSwapBuffers(mainWindow->mainWindow);
 		// poll events (keys pressed and / or released | mouse moved or not)
