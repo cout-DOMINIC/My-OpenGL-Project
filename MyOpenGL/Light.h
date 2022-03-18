@@ -8,7 +8,7 @@ class Light
 public:
 	Light();
 	Light(GLfloat red, GLfloat green, GLfloat blue, GLfloat intensity);
-	void UseLight(GLfloat ambientIntensityLocation, GLfloat ambientColorLocation);
+	void CreateLight(GLfloat ambientIntensityL, GLfloat ambientColorL);
 	~Light();
 
 private:

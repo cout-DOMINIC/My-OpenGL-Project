@@ -19,6 +19,9 @@
 #include "Texture.h"
 #include "Light.h"
 
+
+#include "Primitives.h"
+
 // covers range of ascii codes
 bool keys[1024];
 // Window dimensions
@@ -28,6 +31,11 @@ const GLfloat toRadians{ 3.14159265f / 180.0f };
 
 Window* mainWindow;
 Camera* camera;
+
+
+Primitives primitives;
+
+
 
 std::vector<Mesh*> meshList;
 std::vector<Shader*> shaderList;
@@ -42,7 +50,7 @@ Texture* concreteTexture;
 Texture* grayTexture;
 
 // last argument is to alter light intesity
-Light mainLight = Light(1.0f, 1.0f, 1.0f, 0.7f);
+Light ambientLight = Light(1.0f, 1.0f, 1.0f, 0.7f);
 
 std::string dirt = "Textures/dirt.png";
 const char* d = dirt.c_str();
@@ -85,29 +93,8 @@ GLfloat increment = 0.008f;
 // Creating Fragment Shader itself
 /*static*/ const char* FragmentShader = "Shaders/shader.fragment";
 
-
-
-
-
 void CreateObjects()
 {
-	GLuint indicesTriangle[4 * 3] = {
-		0, 1, 2,
-		1, 3, 2,
-		0, 1, 3,
-		0, 3, 2
-	};
-
-	GLfloat verticesTriangle[4 * 5] =
-	{
-	//	  X		 Y	   Z			 U		 V
-		-1.0f, -1.0f, 0.0f,			0.0f,	0.0f,
-		// this one is going into the background!
-		 0.0f, -1.0f, 1.0f,			1.0f,	0.0f,
-		 1.0f, -1.0f, 0.0f,			2.0f,	0.0f,
-		 0.0f,  1.0f, 0.0f,			1.0f,	2.0f,
-	};
-
 	GLuint indicesSquare[12 * 3] = {
 		// Front
 		0, 1, 2,
@@ -239,7 +226,7 @@ void CreateObjects()
 
 	// Creating new triangle mesh objects
 	Mesh* obj0 = new Mesh();
-	obj0->CreateMesh(verticesTriangle, indicesTriangle, (4 * 5), (4 * 3));
+	obj0->CreateMesh(primitives.verticesTriangle, primitives.indicesTriangle, (4 * 5), (4 * 3));
 	meshList.push_back(obj0);
 
 	Mesh* obj1 = new Mesh();
@@ -401,7 +388,7 @@ int main()
 
 
 
-		mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor);
+		ambientLight.CreateLight(uniformAmbientIntensity, uniformAmbientColor);
 
 
 

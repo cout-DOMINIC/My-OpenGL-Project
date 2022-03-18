@@ -3,11 +3,12 @@
 C:\dev\MyOpenGL\MyOpenGL\Light.cpp(17,14): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
 C:\dev\MyOpenGL\MyOpenGL\Light.cpp(18,14): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
   Main.cpp
-C:\dev\MyOpenGL\MyOpenGL\Main.cpp(367,24): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-C:\dev\MyOpenGL\MyOpenGL\Main.cpp(383,22): warning C4018: '<': signed/unsigned mismatch
-C:\dev\MyOpenGL\MyOpenGL\Main.cpp(404,47): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
-C:\dev\MyOpenGL\MyOpenGL\Main.cpp(404,22): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(354,24): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(370,22): warning C4018: '<': signed/unsigned mismatch
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(391,53): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
+C:\dev\MyOpenGL\MyOpenGL\Main.cpp(391,28): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
   Mesh.cpp
+  Primitives.cpp
   Shader.cpp
   Texture.cpp
   Window.cpp
@@ -20,6 +21,6 @@ C:\dev\MyOpenGL\MyOpenGL\Window.cpp(83,13): warning C4244: '=': conversion from 
   Generating code
   Previous IPDB not found, fall back to full compilation.
 C:\dev\MyOpenGL\MyOpenGL\Window.cpp(48): warning C4715: 'Window::InitialiseWindow': not all control paths return a value
-  All 518 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 522 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   MyOpenGL.vcxproj -> C:\dev\MyOpenGL\Release\MyOpenGL.exe
