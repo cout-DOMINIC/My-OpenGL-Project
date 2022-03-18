@@ -14,6 +14,7 @@ public:
 	std::string ReadFile(const char* fileLocation);
 	void CreateShaderCode(const char* vertexLocation, const char* fragmentLocation);
 	void UseShaderProgram() { glUseProgram(shaderID); }
+	void UseValidateProgram() { glValidateProgram(shaderID); }
 	GLuint GetUniformProjection() { return uniformProjection; }
 	GLuint GetUniformModel() { return uniformModel; }
 	GLuint GetUniformView() { return uniformView; }

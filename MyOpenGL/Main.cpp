@@ -11,14 +11,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Common.h"
 #include "Window.h"
 #include "Mesh.h"
 #include "Shader.h"
 #include "Camera.h"
 #include "Texture.h"
 #include "Light.h"
-
-#include <string>
 
 // covers range of ascii codes
 bool keys[1024];
@@ -28,11 +27,10 @@ const GLint WIDTH = 1920, HEIGHT = 1080;
 const GLfloat toRadians{ 3.14159265f / 180.0f };
 
 Window* mainWindow;
-// lists for all mesh and shader objects
+Camera* camera;
+
 std::vector<Mesh*> meshList;
 std::vector<Shader*> shaderList;
-
-Camera* camera;
 
 Texture* brickTexture;
 Texture* dirtTexture;
@@ -43,37 +41,30 @@ Texture* goldTexture;
 Texture* concreteTexture;
 Texture* grayTexture;
 
-Light mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f);
+// last argument is to alter light intesity
+Light mainLight = Light(1.0f, 1.0f, 1.0f, 0.7f);
 
-// Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
 std::string dirt = "Textures/dirt.png";
 const char* d = dirt.c_str();
 
-// Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
 std::string brick = "Textures/brick.png";
 const char* b = brick.c_str();
 
-// Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
 std::string metal = "Textures/metal.png";
 const char* m = metal.c_str();
 
-// Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
 std::string cloud = "Textures/cloud.png";
 const char* c = cloud.c_str();
 
-// Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
 std::string rust = "Textures/rust.png";
 const char* r = rust.c_str();
 
-// Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
 std::string gold = "Textures/gold.png";
 const char* g = gold.c_str();
 
-// Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
 std::string concrete = "Textures/concrete.png";
 const char* con = concrete.c_str();
 
-// Image must be in PNG and with a bit depth of 32! B/C of the alpha chanel
 std::string gray = "Textures/gray.png";
 const char* gr = gray.c_str();
 
@@ -364,9 +355,15 @@ int main()
 	// Projection Matrix
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<GLfloat>(mainWindow->GetBufferWidth()) / static_cast<GLfloat>(mainWindow->GetBufferHeight()), 0.1f, 100.0f);
 
+
+
+
 	// Loop until window closed
 	while (!glfwWindowShouldClose(mainWindow->mainWindow))
 	{
+
+
+
 		GLfloat currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
@@ -374,23 +371,40 @@ int main()
 		camera->ProcessKeyboardInput(mainWindow->GetKeys(), deltaTime);
 		camera->UpdateMouse(mainWindow->PreventXoffsetMoving(), mainWindow->PreventYoffsetMoving(), deltaTime);
 
+
+
+
 		// Clear window
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
 		for (int i{ 0 }; i < shaderList.size(); ++i)
 		{
+
 			shaderList[0]->UseShaderProgram();
+
 			uniformModel = shaderList[0]->GetUniformModel();
+
+
+
+
 			uniformProjection = shaderList[0]->GetUniformProjection();
 			uniformView = shaderList[0]->GetUniformView();
+
+
 
 			uniformAmbientColor = shaderList[0]->GetAmbientColorLocation();
 			uniformAmbientIntensity = shaderList[0]->GetAmbientIntensityLocation();
 		}
 
+
+
 		mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor);
+
+
+
 
 		// initialised 4 x 4 Model Matrix for each object
 		glm::mat4 triangle{ 1.0f };
@@ -408,9 +422,7 @@ int main()
 		glm::mat4 top{ 1.0f };
 		glm::mat4 item{ 1.0f };
 
-		glm::mat4 xwingModel(1.0f);
 
-		glm::mat4 heliModel(1.0f);
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera->ViewMatrix()));
@@ -462,7 +474,7 @@ int main()
 		// Plane
 		{
 			plane = glm::translate(plane, glm::vec3(0.0f, -3.5f, -10.0f));
-			plane = glm::scale(plane, glm::vec3(2.0f, 0.05f, 2.0f));
+			plane = glm::scale(plane, glm::vec3(3.0f, 0.05f, 3.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(plane));
 			dirtTexture->UseTexture();
 			meshList[3]->RenderMesh();

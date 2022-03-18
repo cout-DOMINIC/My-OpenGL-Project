@@ -17,23 +17,16 @@ std::string Shader::ReadFile(const char* fileLocation)
 		}
 		fileStream.close();
 	}
-	else {
-		printf("Failed to read %s! File does not exist.", fileLocation);
-		return "";
-	}
 	return content;
 }
 
 void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)
 {
 	shaderID = glCreateProgram();
-
 	AddShader(shaderID, vertexCode, GL_VERTEX_SHADER);
 	AddShader(shaderID, fragmentCode, GL_FRAGMENT_SHADER);
-
 	glLinkProgram(shaderID);
-	glValidateProgram(shaderID);
-	
+	UseShaderProgram();
 	uniformModel = glGetUniformLocation(shaderID, "model");
 	uniformProjection = glGetUniformLocation(shaderID, "projection");
 	uniformView = glGetUniformLocation(shaderID, "view");
@@ -48,7 +41,6 @@ void Shader::CreateShaderCode(const char* vertexLocation, const char* fragmentLo
 	// convert string into a C-style string (const char*)
 	const char* vertexCode = vertexString.c_str();
 	const char* fragmentCode = fragmentString.c_str();
-
 	CompileShader(vertexCode, fragmentCode);
 }
 

@@ -1,26 +1,20 @@
 #pragma once
 
 #include <GL/glew.h>
-#include "stb_image.h"
+#include "Common.h"
 
 class Texture
 {
 public:
 	Texture();
 	Texture(const char* fileLocation);
-
-	bool LoadTexture();
-	bool LoadTextureA(); // Alpha-Channel
-
+	bool LoadTextureA(); // with Alpha-Channel
 	void UseTexture();
-	void ClearTexture();
-
 	~Texture();
 
 private:
-	GLuint textureID;
+	GLuint textureID{ 0 };
 	int width{ 0 }, height{ 0 }, bitDepth{ 0 };
-
 	const char* fileLocation;
 };
 
