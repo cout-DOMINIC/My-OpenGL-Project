@@ -44,7 +44,7 @@ Texture* concreteTexture;
 Texture* grayTexture;
 
 // last argument is to alter light intesity
-Light ambientLight = Light(1.0f, 1.0f, 1.0f, 0.5f);
+Light ambientLight = Light(1.0f, 1.0f, 1.0f, 1.0f);
 
 std::string dirt = "Textures/dirt.png";
 const char* d = dirt.c_str();
@@ -214,7 +214,7 @@ int main()
 		camera->UpdateMouse(mainWindow->PreventXoffsetMoving(), mainWindow->PreventYoffsetMoving(), deltaTime);
 
 		// Clear window
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClearColor(0.8f, 1.0f, 0.9f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		for (int i{ 0 }; i < shaderList.size(); ++i)
@@ -253,7 +253,7 @@ int main()
 		// Triangle
 		{
 			triangle = glm::translate(triangle, glm::vec3(-2.5f, 0.0f, -4.0f));
-			triangle = glm::rotate(triangle, angle * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			triangle = glm::rotate(triangle, 90.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 			triangle = glm::scale(triangle, glm::vec3(0.3f, 0.3f, 1.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(triangle));
 			metalTexture->UseTexture();

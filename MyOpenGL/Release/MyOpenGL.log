@@ -1,26 +1,11 @@
-﻿  Camera.cpp
-  Light.cpp
-C:\dev\MyOpenGL\MyOpenGL\Light.cpp(17,14): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
-C:\dev\MyOpenGL\MyOpenGL\Light.cpp(18,14): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
-  Main.cpp
+﻿  Main.cpp
 C:\dev\MyOpenGL\MyOpenGL\Main.cpp(209,24): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
 C:\dev\MyOpenGL\MyOpenGL\Main.cpp(220,22): warning C4018: '<': signed/unsigned mismatch
 C:\dev\MyOpenGL\MyOpenGL\Main.cpp(229,53): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
 C:\dev\MyOpenGL\MyOpenGL\Main.cpp(229,28): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
-  Mesh.cpp
-  Primitives.cpp
-  Shader.cpp
-  Texture.cpp
-  Window.cpp
-C:\dev\MyOpenGL\MyOpenGL\Window.cpp(73,14): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\dev\MyOpenGL\MyOpenGL\Window.cpp(74,14): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\dev\MyOpenGL\MyOpenGL\Window.cpp(78,20): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\dev\MyOpenGL\MyOpenGL\Window.cpp(80,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\dev\MyOpenGL\MyOpenGL\Window.cpp(82,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\dev\MyOpenGL\MyOpenGL\Window.cpp(83,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
   Generating code
-  Previous IPDB not found, fall back to full compilation.
-C:\dev\MyOpenGL\MyOpenGL\Window.cpp(48): warning C4715: 'Window::InitialiseWindow': not all control paths return a value
-  All 522 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  32 of 548 functions ( 5.8%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    8 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   MyOpenGL.vcxproj -> C:\dev\MyOpenGL\Release\MyOpenGL.exe
